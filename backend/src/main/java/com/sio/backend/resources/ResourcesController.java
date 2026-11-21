@@ -3,6 +3,7 @@ package com.sio.backend.resources;
 import com.sio.backend.generics.ApiResponse;
 import com.sio.backend.resources.pathology.PathologiesDTO;
 import com.sio.backend.resources.pathology.PathologiesService;
+import com.sio.backend.resources.arrivalMode.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -90,6 +91,38 @@ class ResourcesController {
     public PathologiesDTO createPathology(@Valid @RequestBody PathologiesDTO dto){
         return pathologiesService.createNewPathology(dto);
     }
+
+
+    //Creazione di una nuova arrivalMode
+    @PostMapping("/resources/arrivalmodes")
+    public arrivalModeDTO createArrivalMode(@Valid @RequestBody arrivalModeDTO dto){
+        return arrivalModeService.createNewArrivalMode(dto);
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     /**
      * Elimina una patologia esistente in base al codice[cite: 9].
