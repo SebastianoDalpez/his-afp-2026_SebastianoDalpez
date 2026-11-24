@@ -52,11 +52,7 @@ public class arrivalModeService {
     } 
 
     
-    /**
-     * Recupero di tutte le modalità d'arrivo registrate (elenco paginato)
-     * @param pageable
-     * @return
-     */
+    
     // public Page<arrivalModeDTO> getAllArrivalModePaginated(Pageable pageable){
         
     // }

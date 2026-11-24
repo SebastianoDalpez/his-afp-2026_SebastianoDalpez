@@ -119,7 +119,9 @@ class ResourcesController {
     @Operation(summary = "Crea una nuova metodologia di arrivo", description = "Inserisce una nuova modalità di arrivo nel database")
     @ApiResponses(value = {
         @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Modalità di arrivo creata con successo"),
-        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "Dati non validi o codice identificativo (sigla) già esistente")
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "Dati non validi o codice identificativo (sigla) già esistente"),
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "500", description = "Errore interno al server")
+
     })
     @PostMapping("/arrivalMode")
     public ApiResponse<arrivalModeDTO> createArrivalMode(@Valid @RequestBody arrivalModeDTO dto){
