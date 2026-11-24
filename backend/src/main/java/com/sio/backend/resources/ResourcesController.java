@@ -54,7 +54,7 @@ class ResourcesController {
     })
     @GetMapping("/pathologies")
     public ApiResponse<Page<PathologiesDTO>> getAllPathologies(
-//            @PageableDefault(size = 10, sort = "code", direction = Sort.Direction.ASC)
+            // @PageableDefault(size = 10, sort = "code", direction = Sort.Direction.ASC)
             Pageable pageable
     ) {
         return ApiResponse.success(
@@ -106,11 +106,47 @@ class ResourcesController {
     }
 
 
+    /**
+     * Elimina una patologia esistente in base al codice[cite: 9].
+     *
+     * @param code il codice identificativo della patologia da rimuovere[cite: 9]
+     * @return un'istanza di {@link ApiResponse} vuota con esito positivo[cite: 9]
+     */
+    @Operation(summary = "Elimina una patologia", description = "Rimuove una patologia dal database tramite il codice")
+    @ApiResponses(value = {
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Patologia eliminata con successo")
+    })
+    @DeleteMapping("/pathologies")
+    public ApiResponse<Void> deletePathology(
+            @Parameter(description = "Codice identificativo della patologia da eliminare", example = "C02")
+            @RequestParam String code
+    ){
+        pathologiesService.deletePathology(code);
+
+        return ApiResponse.success(null);
+    }
+
+    /**
+     * Modifica i dati di una patologia esistente[cite: 9].
+     *
+     * @param dto il DTO contenente i campi aggiornati[cite: 9]
+     * @return un'istanza di {@link ApiResponse} con il {@link PathologiesDTO} aggiornato[cite: 9]
+     */
+    @Operation(summary = "Modifica una patologia", description = "Aggiorna la descrizione di una patologia esistente")
+    @ApiResponses(value = {
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Patologia aggiornata con successo"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "404", description = "Patologia non trovata")
+    })
+    @PutMapping("/pathologies")
+    public ApiResponse<PathologiesDTO> editPathology(@RequestBody PathologiesDTO dto){
+        PathologiesDTO newDto = pathologiesService.editPathology(dto);
+        return ApiResponse.success(newDto);
+    }
+
+
 
 // -------------- Arrival Mode ----------
 
-
-   
     /**
     * Creazione di una nuova modalità d'arrivo (arrivalMode)
     * @param dto --> il DTO inviato dal frontend (JSON)
@@ -130,12 +166,12 @@ class ResourcesController {
 
 
     /**
-     * Recuperare tutte le modalità d'arrivo
-     * @return un oggetto ApiResponse contenente come payload (campo "data") una List di ArrivalModeDTO
+     * Recuperare tutte le modalità d'arrivo (paginate)
+     * @return un oggetto ApiResponse contenente come payload (campo "data") una Page di ArrivalModeDTO
     */
     @GetMapping("/arrivalModes")
-    public ApiResponse<List<arrivalModeDTO>> getAllArrivalModes(){ 
-        return ApiResponse.success(arrivalModeService.getAllArrivalMode());  //restuisco la List di arrivalModeDTO insieme ad altri dati aggiunti dal metodo .success() di ApiResponse
+    public ApiResponse<Page<arrivalModeDTO>> getAllArrivalModes(Pageable pageable){ 
+        return ApiResponse.success(arrivalModeService.getAllArrivalModePaginated(pageable));  //restuisco Page di arrivalModeDTO insieme ad altri dati aggiunti dal metodo .success() di ApiResponse
     } 
 
 
@@ -192,43 +228,6 @@ class ResourcesController {
 
 
 
-
-    /**
-     * Elimina una patologia esistente in base al codice[cite: 9].
-     *
-     * @param code il codice identificativo della patologia da rimuovere[cite: 9]
-     * @return un'istanza di {@link ApiResponse} vuota con esito positivo[cite: 9]
-     */
-    @Operation(summary = "Elimina una patologia", description = "Rimuove una patologia dal database tramite il codice")
-    @ApiResponses(value = {
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Patologia eliminata con successo")
-    })
-    @DeleteMapping("/pathologies")
-    public ApiResponse<Void> deletePathology(
-            @Parameter(description = "Codice identificativo della patologia da eliminare", example = "C02")
-            @RequestParam String code
-    ){
-        pathologiesService.deletePathology(code);
-
-        return ApiResponse.success(null);
-    }
-
-    /**
-     * Modifica i dati di una patologia esistente[cite: 9].
-     *
-     * @param dto il DTO contenente i campi aggiornati[cite: 9]
-     * @return un'istanza di {@link ApiResponse} con il {@link PathologiesDTO} aggiornato[cite: 9]
-     */
-    @Operation(summary = "Modifica una patologia", description = "Aggiorna la descrizione di una patologia esistente")
-    @ApiResponses(value = {
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Patologia aggiornata con successo"),
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "404", description = "Patologia non trovata")
-    })
-    @PutMapping("/pathologies")
-    public ApiResponse<PathologiesDTO> editPathology(@RequestBody PathologiesDTO dto){
-        PathologiesDTO newDto = pathologiesService.editPathology(dto);
-        return ApiResponse.success(newDto);
-    }
 
     /**
      * Endpoint di utilità per simulare un errore del server a fini di test e debug[cite: 9].

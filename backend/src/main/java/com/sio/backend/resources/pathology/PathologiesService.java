@@ -63,7 +63,6 @@ public class PathologiesService {
     @Transactional(readOnly = true)
     public Page<PathologiesDTO> getAllPathologiesPaginated(Pageable pageable){
         Page<Pathologies> entityPage = repo.findAll(pageable);
-
         return entityPage.map(mapper::toDTO);
     }
 
