@@ -80,10 +80,8 @@ public class arrivalModeService {
      * @param code --> il codice della modalità d'arrivo da cercare nel DB ed eliminare; fornito dall'utente
      * @return dto --> il DTO dell'Entity appena eliminata
      */
-    public arrivalModeDTO deleteArrivalMode(String code){
-    arrivalMode entityToDelete = mapper.toEntity(getArrivalModeById(code));
+    public void deleteArrivalMode(String code){
         repo.deleteById(code); 
-        return mapper.toDTO(entityToDelete);
     }
     
 

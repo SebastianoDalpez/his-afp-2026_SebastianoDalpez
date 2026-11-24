@@ -126,6 +126,8 @@ class ResourcesController {
         return ApiResponse.success(null);
     }
 
+
+
     /**
      * Modifica i dati di una patologia esistente[cite: 9].
      *
@@ -185,6 +187,20 @@ class ResourcesController {
         return ApiResponse.success(arrivalModeService.getArrivalModeById(code));
     } 
     
+
+
+    /**
+     * 
+     * @return
+     *
+     */
+    @DeleteMapping("/arrivalMode/{code}")
+    public ApiResponse<Void> deleteExistingArrivalMode(@PathVariable String code){
+        arrivalModeService.deleteArrivalMode(code);
+
+        return ApiResponse.success(null);
+    }
+    
     
     // /**
     //  * Modificare una modalità d'arrivo 
@@ -198,15 +214,7 @@ class ResourcesController {
     
 
     
-    /**
-     * 
-     * @return
-     *
-     */
-    @PostMapping("/arrivalMode/{code}")
-    public ApiResponse<arrivalModeDTO> deleteExistingArrivalMode(@PathVariable String code){
-        return ApiResponse.success(arrivalModeService.deleteArrivalMode(code)); 
-    }
+
 
 
 
