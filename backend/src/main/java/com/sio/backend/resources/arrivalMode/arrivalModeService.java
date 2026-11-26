@@ -54,7 +54,7 @@ public class arrivalModeService {
     
     /**
      * @param pageable oggetto contenente i parametri per la paginazione e l'ordinamento
-     * @return una pagina di arrivalModeDTO
+     * @return una page di arrivalModeDTO
      */
     public Page<arrivalModeDTO> getAllArrivalModePaginated(Pageable pageable){
         Page<arrivalMode> arrivalModePage = repo.findAll(pageable);
