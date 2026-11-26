@@ -40,23 +40,27 @@ public class arrivalModeService {
         }
     }
     
-    /**
-     * Recupero di tutte le modalità d'arrivo registrate (elenco completo)
-     * @return un vettore (List) di arrivalModeDTO
-     */
-    @Transactional(readOnly = true)
-    public List<arrivalModeDTO> getAllArrivalMode(){
-        return repo.findAll().stream()     //.stream() scrorre tutto il vettore restituito dal contoller
-            .map(mapper::toDTO)     //.map() prende ogni singola Entity restiuita dal DB e la trasforma in un DTO 
-            .toList();              //.toList() mette i nuovi DTO creati e li mette in un vettore (List)
-    } 
+    // /**
+    //  * Recupero di tutte le modalità d'arrivo registrate (elenco completo)
+    //  * @return un vettore (List) di arrivalModeDTO
+    //  */
+    // @Transactional(readOnly = true)
+    // public List<arrivalModeDTO> getAllArrivalMode(){
+    //     return repo.findAll().stream()     //.stream() scrorre tutto il vettore restituito dal contoller
+    //         .map(mapper::toDTO)     //.map() prende ogni singola Entity restiuita dal DB e la trasforma in un DTO 
+    //         .toList();              //.toList() mette i nuovi DTO creati e li mette in un vettore (List)
+    // } 
 
     
-    
-    // public Page<arrivalModeDTO> getAllArrivalModePaginated(Pageable pageable){
-        
-    // }
-    
+    /**
+     * @param pageable oggetto contenente i parametri per la paginazione e l'ordinamento
+     * @return una pagina di arrivalModeDTO
+     */
+    public Page<arrivalModeDTO> getAllArrivalModePaginated(Pageable pageable){
+        Page<arrivalMode> arrivalModePage = repo.findAll(pageable);
+        return arrivalModePage.map(mapper::toDTO);
+    }
+
 
     /**
      * Cerca, tra tutti i record del DB di quella tabella, il record che nel campo "code" contiene il valore fornito dall'utente
@@ -76,10 +80,8 @@ public class arrivalModeService {
      * @param code --> il codice della modalità d'arrivo da cercare nel DB ed eliminare; fornito dall'utente
      * @return dto --> il DTO dell'Entity appena eliminata
      */
-    public arrivalModeDTO deleteArrivalMode(String code){
-    arrivalMode entityToDelete = mapper.toEntity(getArrivalModeById(code));
+    public void deleteArrivalMode(String code){
         repo.deleteById(code); 
-        return mapper.toDTO(entityToDelete);
     }
     
 

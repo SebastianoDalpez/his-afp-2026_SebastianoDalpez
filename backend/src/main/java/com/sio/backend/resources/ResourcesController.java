@@ -54,7 +54,7 @@ class ResourcesController {
     })
     @GetMapping("/pathologies")
     public ApiResponse<Page<PathologiesDTO>> getAllPathologies(
-//            @PageableDefault(size = 10, sort = "code", direction = Sort.Direction.ASC)
+            // @PageableDefault(size = 10, sort = "code", direction = Sort.Direction.ASC)
             Pageable pageable
     ) {
         return ApiResponse.success(
@@ -106,93 +106,6 @@ class ResourcesController {
     }
 
 
-
-// -------------- Arrival Mode ----------
-
-
-   
-    /**
-    * Creazione di una nuova modalità d'arrivo (arrivalMode)
-    * @param dto --> il DTO inviato dal frontend (JSON)
-    * @return il dto dell'Entity appena creata 
-    */
-    @Operation(summary = "Crea una nuova metodologia di arrivo", description = "Inserisce una nuova modalità di arrivo nel database")
-    @ApiResponses(value = {
-        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Modalità di arrivo creata con successo"),
-        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "Dati non validi o codice identificativo (sigla) già esistente"),
-        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "500", description = "Errore interno al server")
-
-    })
-    @PostMapping("/arrivalMode")
-    public ApiResponse<arrivalModeDTO> createArrivalMode(@Valid @RequestBody arrivalModeDTO dto){
-        return ApiResponse.success(arrivalModeService.createNewArrivalMode(dto));
-    }
-
-
-    /**
-     * Recuperare tutte le modalità d'arrivo
-     * @return un oggetto ApiResponse contenente come payload (campo "data") una List di ArrivalModeDTO
-    */
-    @GetMapping("/arrivalModes")
-    public ApiResponse<List<arrivalModeDTO>> getAllArrivalModes(){ 
-        return ApiResponse.success(arrivalModeService.getAllArrivalMode());  //restuisco la List di arrivalModeDTO insieme ad altri dati aggiunti dal metodo .success() di ApiResponse
-    } 
-
-
-    /**
-     * Recuperare una singola modalità d'arrivo tramite il codice identificativo di quella modalità d'arrivo fornita dall'utente
-     * @param code --> il codice di una singola modalità d'arrivo
-     * @return --> il DTO della modalità d'arrivo trovata wrappato da (o contenuto in) un istanza della classe ApiResponse
-     */
-    @GetMapping("/arrivalMode/{code}")
-    public ApiResponse<arrivalModeDTO> getArrivalModeByCode(@PathVariable String code){ //PathVariable permette di estrarre il codice fornito dall'utente nell URL ed inserirlo in una variabile Java
-        return ApiResponse.success(arrivalModeService.getArrivalModeById(code));
-    } 
-    
-    
-    // /**
-    //  * Modificare una modalità d'arrivo 
-    //  * @param 
-    //  * @return
-    //  */
-    // @PostMapping("/arrivalMode") // ha lo stesso endpoint di createArrivalMode ??????????
-    // public arrivalModeDTO modifyExistingArrivalMode(@RequestBody arrivalModeDTO dto) {
-    //     return arrivalModeService.modifyArrivalModeDescription(dto);        
-    // }
-    
-
-    
-    /**
-     * 
-     * @return
-     *
-     */
-    @PostMapping("/arrivalMode/{code}")
-    public ApiResponse<arrivalModeDTO> deleteExistingArrivalMode(@PathVariable String code){
-        return ApiResponse.success(arrivalModeService.deleteArrivalMode(code)); 
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     /**
      * Elimina una patologia esistente in base al codice[cite: 9].
      *
@@ -213,6 +126,8 @@ class ResourcesController {
         return ApiResponse.success(null);
     }
 
+
+
     /**
      * Modifica i dati di una patologia esistente[cite: 9].
      *
@@ -229,6 +144,98 @@ class ResourcesController {
         PathologiesDTO newDto = pathologiesService.editPathology(dto);
         return ApiResponse.success(newDto);
     }
+
+
+
+// -------------- Arrival Mode ----------
+
+    /**
+    * Creazione di una nuova modalità d'arrivo (arrivalMode)
+    * @param dto --> il DTO inviato dal frontend (JSON)
+    * @return il dto dell'Entity appena creata 
+    */
+    @Operation(summary = "Crea una nuova metodologia di arrivo", description = "Inserisce una nuova modalità di arrivo nel database")
+    @ApiResponses(value = {
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Modalità di arrivo creata con successo"),
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "Dati non validi o codice identificativo (sigla) già esistente"),
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "500", description = "Errore interno al server")
+
+    })
+    @PostMapping("/arrivalMode")
+    public ApiResponse<arrivalModeDTO> createArrivalMode(@Valid @RequestBody arrivalModeDTO dto){
+        return ApiResponse.success(arrivalModeService.createNewArrivalMode(dto));
+    }
+
+
+    /**
+     * Recuperare tutte le modalità d'arrivo (paginate)
+     * @return un oggetto ApiResponse contenente come payload (campo "data") una Page di ArrivalModeDTO
+    */
+    @GetMapping("/arrivalModes")
+    public ApiResponse<Page<arrivalModeDTO>> getAllArrivalModes(Pageable pageable){ 
+        return ApiResponse.success(arrivalModeService.getAllArrivalModePaginated(pageable));  //restuisco Page di arrivalModeDTO insieme ad altri dati aggiunti dal metodo .success() di ApiResponse
+    } 
+
+
+    /**
+     * Recuperare una singola modalità d'arrivo tramite il codice identificativo di quella modalità d'arrivo fornita dall'utente
+     * @param code --> il codice di una singola modalità d'arrivo
+     * @return --> il DTO della modalità d'arrivo trovata wrappato da (o contenuto in) un istanza della classe ApiResponse
+     */
+    @GetMapping("/arrivalMode/{code}")
+    public ApiResponse<arrivalModeDTO> getArrivalModeByCode(@PathVariable String code){ //PathVariable permette di estrarre il codice fornito dall'utente nell URL ed inserirlo in una variabile Java
+        return ApiResponse.success(arrivalModeService.getArrivalModeById(code));
+    } 
+    
+
+
+    /**
+     * 
+     * @return
+     *
+     */
+    @DeleteMapping("/arrivalMode/{code}")
+    public ApiResponse<Void> deleteExistingArrivalMode(@PathVariable String code){
+        arrivalModeService.deleteArrivalMode(code);
+
+        return ApiResponse.success(null);
+    }
+    
+    
+    // /**
+    //  * Modificare una modalità d'arrivo 
+    //  * @param 
+    //  * @return
+    //  */
+    // @PostMapping("/arrivalMode") // ha lo stesso endpoint di createArrivalMode ??????????
+    // public arrivalModeDTO modifyExistingArrivalMode(@RequestBody arrivalModeDTO dto) {
+    //     return arrivalModeService.modifyArrivalModeDescription(dto);        
+    // }
+    
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     /**
      * Endpoint di utilità per simulare un errore del server a fini di test e debug[cite: 9].
