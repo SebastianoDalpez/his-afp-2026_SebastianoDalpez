@@ -1,7 +1,9 @@
 package com.sio.backend.resources.triagecolor;
 
 import com.sio.backend.resources.triagecolor.triagecolor;
+import org.springframework.stereotype.Component;
 
+@Component
 public class triagecolorMapper {
     public triagecolor toEntity(triagecolorDTO dto){
         return new triagecolor(
